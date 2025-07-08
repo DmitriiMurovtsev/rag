@@ -1,0 +1,21 @@
+import os
+from fastapi import FastAPI, Request
+from gigachat import GigaChat
+from dotenv import load_dotenv
+
+load_dotenv()
+GIGA_API_KEY = os.getenv("GIGA_API_KEY")
+
+app = FastAPI()
+
+
+@app.post("/chat")
+async def read_root(request: Request):
+    """ Перенаправляет запрос на API """
+    data = await request.json()
+    prompt = data.get("prompt")
+    
+    with GigaChat(api_key=GIGA_API_KEY) as chat:
+        answer = chat.chat(prompt)
+        return {"answer": answer}
+
