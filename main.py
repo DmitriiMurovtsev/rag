@@ -12,10 +12,13 @@ app = FastAPI()
 @app.post("/chat")
 async def read_root(request: Request):
     """ Перенаправляет запрос на API """
-    data = await request.json()
-    prompt = data.get("prompt")
-    
-    with GigaChat(credentials=GIGA_API_KEY) as chat:
-        answer = chat.chat(prompt)
-        return {"answer": answer}
+    try:
+        data = await request.json()
+        prompt = data.get("prompt")
+        
+        with GigaChat(credentials=GIGA_API_KEY) as chat:
+            answer = chat.chat(prompt)
+            return {"answer": answer}
+    except Exception as e:
+        return {"error": str(e)}
 
