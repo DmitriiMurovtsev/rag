@@ -15,7 +15,7 @@ async def read_root(request: Request):
     data = await request.json()
     prompt = data.get("prompt")
     
-    with GigaChat(api_key=GIGA_API_KEY) as chat:
+    with GigaChat(credentials=GIGA_API_KEY) as chat:
         answer = chat.chat(prompt)
         return {"answer": answer}
 
