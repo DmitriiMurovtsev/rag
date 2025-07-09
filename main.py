@@ -1,8 +1,10 @@
+from curses.ascii import HT
 import os
-from fastapi import FastAPI, Request
+import requests
+from fastapi import FastAPI, Request, HTTPException
 from gigachat import GigaChat
 from dotenv import load_dotenv
-from typing import Dict
+from typing import Dict, List
 
 load_dotenv()
 GIGA_API_KEY = os.getenv("GIGA_API_KEY")
@@ -34,10 +36,14 @@ async def read_root(request: Request):
             answer = response.choices[0].message.content
             return {"answer": answer}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-async def search_db(question: str) -> Dict[str, str]:
+async def search_db(question: str) -> List[Dict[str, str]]:
     """ Производит поиск по векторной БД. """
+    try:
+        response = requests.post(f"http://qa-service:6500/search", json={'query': question, 'top': 3})
+        return response.json()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
-    pass
