@@ -23,3 +23,14 @@ async def read_root(request: Request):
     except Exception as e:
         return {"error": str(e)}
 
+
+@app.post("/add_question")
+async def add_question(request: Request):
+    """ Добавляет вопрос в базу данных """
+    try:
+        data = await request.json()
+        question = data.get("question")
+        answer = data.get("answer")
+        return {"message": "Question added successfully"}
+    except Exception as e:
+        return {"error": str(e)}
