@@ -26,8 +26,12 @@ async def read_root(request: Request):
     try:
         data = await request.json()
         question = data.get("question")     
-           
-        answer = await search_db(question)
+        
+        try:
+            answer = await search_db(question)
+        except ValueError as e:
+            raise HTTPException(status_code=500, detail=str(e))
+            
         context = "\n".join([f"{k}: {v}" for k, v in answer.items()])
         prompt = f"{SYSTEM_PROMPT}\n\nВопрос: {question} \n\nКонтекст: {context}"
         
@@ -45,5 +49,5 @@ async def search_db(question: str) -> List[Dict[str, str]]:
         response = requests.post(f"http://qa-service:6500/search", json={'query': question, 'top': 3})
         return response.json()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise ValueError("Ошибка поиска")
     
