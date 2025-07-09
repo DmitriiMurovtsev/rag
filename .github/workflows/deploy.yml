@@ -24,6 +24,7 @@ jobs:
                       git pull
                       docker stop rag || true
                       docker rm rag || true
+                      export DOCKER_BUILDKIT=1
                       docker build -t rag-service:1.0 .
                       docker run -d -p 127.0.0.1:8002:8001 --name rag --env-file .env rag-service:1.0
                       docker image prune -f
