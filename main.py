@@ -39,4 +39,5 @@ async def add_question(request: Request):
     
 async def get_answer(question: str) -> Dict[str, str]:
     """ Отправляет запрос к векторной БД и получает ответ. """
+    
     pass
