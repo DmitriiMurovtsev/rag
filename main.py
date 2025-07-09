@@ -39,4 +39,5 @@ async def read_root(request: Request):
 
 async def search_db(question: str) -> Dict[str, str]:
     """ Производит поиск по векторной БД. """
+    
     pass
