@@ -1,4 +1,5 @@
-from curses.ascii import HT
+
+import logging
 import os
 import requests
 from fastapi import FastAPI, Request, HTTPException
@@ -16,6 +17,8 @@ SYSTEM_PROMPT = """
 Если не знаешь ответа, скажи что ответ не найден и попроси перефразировать вопрос.
 Не используй эмоции, смайлики, ссылки.
 """
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -47,6 +50,7 @@ async def search_db(question: str) -> List[Dict[str, str]]:
     """ Производит поиск по векторной БД. """
     try:
         response = requests.post(f"http://qa-service:6500/search", json={'query': question, 'top': 3})
+        logger.info(f'response_text: {response.text}')
         if response.status_code != 200:
             raise ValueError(f"Ошибка поиска: {response.status_code} {response.text}")
         
