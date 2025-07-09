@@ -47,6 +47,9 @@ async def search_db(question: str) -> List[Dict[str, str]]:
     """ Производит поиск по векторной БД. """
     try:
         response = requests.post(f"http://qa-service:6500/search", json={'query': question, 'top': 3})
+        if response.status_code != 200:
+            raise ValueError(f"Ошибка поиска: {response.status_code} {response.text}")
+        
         return response.json()
     except Exception as e:
         raise ValueError("Ошибка поиска")
