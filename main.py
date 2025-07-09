@@ -35,7 +35,9 @@ async def read_root(request: Request):
         except ValueError as e:
             raise HTTPException(status_code=500, detail=str(e))
             
-        context = "\n".join([f"{k}: {v}" for k, v in answer.items()])
+        context = "\n".join(
+            [f"{item['question']}: {item['answer']}" for item in answer]
+        )
         prompt = f"{SYSTEM_PROMPT}\n\nВопрос: {question} \n\nКонтекст: {context}"
         
         with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
