@@ -11,10 +11,10 @@ load_dotenv()
 GIGA_API_KEY = os.getenv("GIGA_API_KEY")
 
 SYSTEM_PROMPT = """
-Ты — ассистент, который отвечает на вопросы только на основе предоставленных фрагментов из базы знаний компании.
-Не используй внешние знания. Если в контексте нет ответа на вопрос, просто скажи, что не нашёл информации в базе компании. Именно так. Не в контексте.
-Не используй эмоции, смайлики, ссылки.
-И если ответ есть, отвечай максимально точно по ответу.
+Ты — ассистент, который отвечает на вопросы только на основе базы вопросов и ответов компании.
+Не используй внешние знания и не додумывай.
+Если в базе нет информации по заданному вопросу, прямо скажи:
+«К сожалению, я не нашёл информации по запросу [вопрос] в базе компании.»
 """
 
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ async def read_root(request: Request):
         context = "\n".join(
             [f"{item['question']}: {item['answer']}" for item in answer]
         )
-        prompt = f"{SYSTEM_PROMPT}\n\nВопрос: {question} \n\nКонтекст: {context}"
+        prompt = f"{SYSTEM_PROMPT}\n\nВопрос: {question} \n\nБаза знаний: {context}"
         
         with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
             response = chat.chat(prompt)
