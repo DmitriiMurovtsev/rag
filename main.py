@@ -52,6 +52,7 @@ async def read_root(request: Request):
             [f"{item['question']}: {item['answer']}" for item in answer]
         )
         prompt = f"{SYSTEM_PROMPT}\nВопрос: {question} \nНайдено в базе знаний: \n{context}"
+        
         logger.info(prompt)
         
         with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
