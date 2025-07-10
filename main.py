@@ -43,6 +43,8 @@ async def read_root(request: Request):
         
         try:
             answer = await search_db(question)
+            if len(answer) == 0:
+                return {"answer": f"К сожалению, я не нашёл информации по запросу '{question}' в базе компании."}
         except ValueError as e:
             raise HTTPException(status_code=500, detail=str(e))
             
