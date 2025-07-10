@@ -20,6 +20,13 @@ SYSTEM_PROMPT = """
 """
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# логируем в stdout
+handler = logging.StreamHandler()
+formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 app = FastAPI()
 
@@ -40,6 +47,7 @@ async def read_root(request: Request):
             [f"{item['question']}: {item['answer']}" for item in answer]
         )
         prompt = f"{SYSTEM_PROMPT}\n\nВопрос: {question} \n\nБаза знаний: {context}"
+        logger.info(prompt)
         
         with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
             response = chat.chat(prompt)
