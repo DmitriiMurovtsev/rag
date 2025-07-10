@@ -55,7 +55,7 @@ async def read_root(request: Request):
             raise HTTPException(status_code=500, detail=str(e))
             
         context = "\n".join(
-            [f"{item['question']}: {item['answer']}" for item in answer]
+            [f"Вопрос: {item['question']}: Ответ: {item['answer']}" for item in answer]
         )
         prompt = f"{SYSTEM_PROMPT}\nВопрос: {question} \nНайдено в базе знаний: \n{context}"
         
