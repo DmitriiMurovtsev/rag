@@ -87,3 +87,6 @@ async def search_db(question: str) -> List[Dict[str, str]]:
     except Exception as e:
         raise ValueError("Ошибка поиска")
     
+
+
+    
