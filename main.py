@@ -100,6 +100,7 @@ async def car_data(request: Request) -> Dict[str, str]:
             "vin": "строка из 17 символов" или None,
             "number": "госномер" или None,
             "brand": "марка и модель" или None
+            "year": "год выпуска" или None
 
         {text}
         """
