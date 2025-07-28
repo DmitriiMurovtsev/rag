@@ -94,19 +94,24 @@ async def car_data(request: Request) -> Dict[str, str]:
         data = await request.json()
         text = data.get("text")
         
-        prompt = f"""
-        Ты — помощник по извлечению данных из текста. Извлеки: vin номер авто, госномер и марку и модель авто. Формат ответа: Python-словарь с ключами:
+        prompt = """
+        Ты — помощник по извлечению данных из текста.
+        Ничего не придумывай, только извлеки данные из текста.
+        Извлеки: vin номер авто, госномер и марку и модель авто и год выпуска. Если что-то не нашел, не придумывай.
+        год выпуска указывай только если он указан в тексте. Никаких дополнительный вычислений не делай.
+        Формат ответа:
+        {
             "vin": "строка из 17 символов" или None,
             "number": "госномер" или None,
-            "brand": "марка и модель" или None
+            "brand": "марка и модель" или None,
             "year": "год выпуска" или None
-        Текст:
-        {text}
+        }
+        Текст:\n
         """
         logger.info(prompt)
         
         with GigaChat(credentials=GIGA_API_KEY, model="GigaChat-2-MAX", verify_ssl_certs=False) as chat:
-            response = chat.chat(prompt)
+            response = chat.chat(prompt + text)
             answer = response.choices[0].message.content
             return {"data": answer}
         
