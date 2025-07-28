@@ -102,7 +102,7 @@ async def get_car_data(text: str) -> Dict[str, str]:
         """
         logger.info(prompt)
         
-        with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
+        with GigaChat(credentials=GIGA_API_KEY, model="GigaChat-2-MAX", verify_ssl_certs=False) as chat:
             response = chat.chat(prompt)
             answer = response.choices[0].message.content
             return {"data": answer}
