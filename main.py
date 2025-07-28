@@ -87,6 +87,32 @@ async def search_db(question: str) -> List[Dict[str, str]]:
     except Exception as e:
         raise ValueError("Ошибка поиска")
     
+    
+async def get_car_data(text: str) -> Dict[str, str]:
+    """ Возвращает данные по авто из данных полиса. """
+    try:
+        prompt = f"""
+        Ты — помощник по извлечению данных из текста. Извлеки: vin номер авто, госномер и марку и модель авто
+        ответ строго в формате json
+            "vin": "строка из 17 символов" или None,
+            "number": "госномер" или None,
+            "brand": "марка и модель" или None
+
+        {text}
+        """
+        logger.info(prompt)
+        
+        with GigaChat(credentials=GIGA_API_KEY, model="GigaChat", verify_ssl_certs=False) as chat:
+            response = chat.chat(prompt)
+            answer = response.choices[0].message.content
+            return {"data": answer}
+        
+    except Exception as e:
+        logger.error(f"Ошибка при извлечении данных из текста: {e}")
+        return {"data": None}
+        
+        
+    
 
 
     
