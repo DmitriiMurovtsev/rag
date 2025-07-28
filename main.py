@@ -87,10 +87,13 @@ async def search_db(question: str) -> List[Dict[str, str]]:
     except Exception as e:
         raise ValueError("Ошибка поиска")
     
-    
-async def get_car_data(text: str) -> Dict[str, str]:
+@app.post("/car_data")
+async def car_data(request: Request) -> Dict[str, str]:
     """ Возвращает данные по авто из данных полиса. """
     try:
+        data = await request.json()
+        text = data.get("text")
+        
         prompt = f"""
         Ты — помощник по извлечению данных из текста. Извлеки: vin номер авто, госномер и марку и модель авто
         ответ строго в формате json
